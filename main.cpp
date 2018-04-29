@@ -1,5 +1,5 @@
 /* LXX, a project dedicated to find citations of the
- * Septuaginta in the Greek New Testament.
+ * Septuagint in the Greek New Testament.
  * This code is in the public domain
  * and contributed by Zoltán Kovács <zoltan@geogebra.org>.
  */

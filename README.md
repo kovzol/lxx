@@ -1,7 +1,7 @@
 # LXX
 
 This project is dedicated to find citations of the
-[Septuaginta](https://en.wikipedia.org/wiki/Septuagint) in the
+[Septuagint](https://en.wikipedia.org/wiki/Septuagint) in the
 [Greek New Testament](https://en.wikipedia.org/wiki/New_Testament).
 
 ## Background
@@ -22,24 +22,24 @@ texts be cited in the Greek text?
 There are several research projects on this,
 and today it seems to be clear that many authors of
 the New Testament cite a Greek translation of
-the Hebrew text, namely the Septuaginta, that
+the Hebrew text, namely the Septuagint, that
 was widely popular in the first centuries, and still popular
 in some Christian churches. Many
 Bible translations, however, mostly use only the
 Hebrew text as a basis of the Old Testament,
-because the importance of the Septuaginta is
+because the importance of the Septuagint is
 not yet widely identified.
 
 ## This project
 
 This software project attempts to support finding citations
-of the Septuaginta in the New Testament automatically.
+of the Septuagint in the New Testament automatically.
 The work is based on The SWORD Project.
 
 ## The method used
 
 The provided software tool compares all verses
-of the Septuaginta with all verses of the Greek New Testament.
+of the Septuagint with all verses of the Greek New Testament.
 The texts are provided by the Sword project
 from the modules LXX and SBLGNT.
 
@@ -64,7 +64,7 @@ Genesis 1:27 ("So God created mankind in his own image,
 in the image of God he created them; male and female he created them.",
 New International Version) appears as **και εποιησεν ο 
 θεος τον ανθρωπον κατ εικονα θεου εποιησεν αυτον 
-αρσεν και θηλυ εποιησεν αυτους** in the Septuaginta.
+αρσεν και θηλυ εποιησεν αυτους** in the Septuagint.
 This verse is stored in the form "εποιη ανθρω
 εικον εποιη αυτον αρσεν εποιη αυτου" internally.
 
