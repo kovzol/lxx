@@ -1,10 +1,13 @@
 # LXX
 
-This project is dedicated to find citations of the Septuaginta in the Greek New Testament.
+This project is dedicated to find citations of the
+[Septuaginta](https://en.wikipedia.org/wiki/Septuagint) in the
+[Greek New Testament](https://en.wikipedia.org/wiki/New_Testament).
 
 ## Background
 
-The Bible, a book that has been translated into [many languages](https://en.wikipedia.org/wiki/Bible_translations),
+The [Bible](https://en.wikipedia.org/wiki/Bible),
+a book that has been translated into [many languages](https://en.wikipedia.org/wiki/Bible_translations),
 is maybe the most important book has ever existed. Believers
 have evidence that it is God's word, written by
 various people being inspired by God himself.
@@ -66,21 +69,23 @@ This verse is stored in the form "εποιη ανθρω
 εικον εποιη αυτον αρσεν εποιη αυτου" internally.
 
 In the New Testament there are two matches of this
-verse of the Old Testament. The first occurence
-is Matthew 19:4: **ὁ δὲ ἀποκριθεὶς ⸀εἶπεν· Οὐκ
+verse of the Old Testament. The first occurrence
+is Matthew 19:4 ("“Haven’t you read,” he replied,
+“that at the beginning the Creator ‘made them male and female,’",
+New International Version): **ὁ δὲ ἀποκριθεὶς ⸀εἶπεν· Οὐκ
 ἀνέγνωτε ὅτι ὁ ⸀κτίσας ἀπʼ ἀρχῆς ἄρσεν καὶ θῆλυ
 ἐποίησεν αὐτοὺς**. This is internally rendered
 as "αποκρ ειπεν ανεγν κτισα αρσεν εποιη αυτου".
 
 Now Genesis 1:27 is stored as 8 words, and Matthew 19:4
-on 7 words, both on 5 letter. The computer finds
+as 7 words, both in 5 letters. The computer finds
 then that the 3 last words match, and prints
 both verses on the terminal window in this form:
 ```
 Genesis 1:27 (30) seems to be cited in Matthew 19:4 (24757)
 ```
 The numbers in parentheses show where these
-verses are placed in the Sword databases.
+verses appear in the Sword databases internally.
 
 Note that the software tool ignores matches
 under having at least 3 matching words. 
@@ -98,7 +103,7 @@ a future version of the tool.
 ## Using the software tool
 
 At the moment the project was tested on
-Ubuntu Linux 17.04 but it should work
+Ubuntu Linux 17.10 but it should work
 on many other systems.
 
 ### Installation
