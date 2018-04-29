@@ -113,6 +113,7 @@ should be entered on command line:
 ```commandline
 sudo apt install libsword-common libsword-dev git cmake build-essentials
 git clone https://github.com/kovzol/lxx.git
+cd lxx
 cmake .
 make
 ```
