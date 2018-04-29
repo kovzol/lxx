@@ -117,9 +117,9 @@ cmake .
 make
 ```
 Then the modules LXX and SBLGNT need to be downloaded from
-[The SWORD Project](https://www.crosswire.org/sword/modules/ModDisp.jsp?modType=Bibles)
-and follow the steps at the [For Linux](https://www.crosswire.org/sword/docs/moduleinstall.jsp)
-section on the website of The SWORD Project.
+[The SWORD Project](https://www.crosswire.org/sword/modules/ModDisp.jsp?modType=Bibles).
+Finally the steps at the [For Linux](https://www.crosswire.org/sword/docs/moduleinstall.jsp)
+section on the website of The SWORD Project should be followed.
 
 ### Running
 
@@ -131,3 +131,5 @@ Enter the command
 ### Full output
 
 The full output of a simple run can be found in the file [output.txt](output.txt).
+This output can be created in about 10 minutes by using a modern
+personal computer.
