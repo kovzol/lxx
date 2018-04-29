@@ -40,7 +40,7 @@ The work is based on The SWORD Project.
 
 The provided software tool compares all verses
 of the Septuagint with all verses of the Greek New Testament.
-The texts are provided by the Sword project
+The texts are provided by the SWORD project
 from the modules LXX and SBLGNT.
 
 It is well-known that citations can differ in
@@ -85,7 +85,7 @@ both verses on the terminal window in this form:
 Genesis 1:27 (30) seems to be cited in Matthew 19:4 (24757)
 ```
 The numbers in parentheses show where these
-verses appear in the Sword databases internally.
+verses appear in the SWORD databases internally.
 
 Note that the software tool ignores matches
 under having at least 3 matching words. 
