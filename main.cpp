@@ -89,7 +89,15 @@ void loadVerses() {
     SWMgr library(new MarkupFilterMgr(FMT_PLAIN));
     SWModule *lxx, *sblgnt;
     lxx = library.getModule("LXX");
+    if (!lxx) {
+        cout << "The SWORD module LXX is not installed" << "\n";
+        exit(1);
+    }
     sblgnt = library.getModule("SBLGNT");
+    if (!sblgnt) {
+        cout << "The SWORD module SBLGNT is not installed" << "\n";
+        exit(1);
+    }
     lxx->setKey("Genesis 1:1");
     lstart = lxx->getIndex(); // 4
     lxx->setKey("Malachi 4:6");
