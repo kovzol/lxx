@@ -20,8 +20,9 @@ There are several research projects on this,
 and today it seems to be clear that many authors of
 the New Testament cite a Greek translation of
 the Hebrew text, namely the Septuaginta, that
-was widely popular in the first centuries. Many
-Bible translations, however, attempt to use only the
+was widely popular in the first centuries, and still popular
+in some Christian churches. Many
+Bible translations, however, mostly use only the
 Hebrew text as a basis of the Old Testament,
 because the importance of the Septuaginta is
 not yet widely identified.
@@ -30,7 +31,7 @@ not yet widely identified.
 
 This software project attempts to support finding citations
 of the Septuaginta in the New Testament automatically.
-The work is based on the Sword Project.
+The work is based on The SWORD Project.
 
 ## The method used
 
@@ -110,6 +111,10 @@ git clone https://github.com/kovzol/lxx.git
 cmake .
 make
 ```
+Then the modules LXX and SBLGNT need to be downloaded from
+[The SWORD Project](https://www.crosswire.org/sword/modules/ModDisp.jsp?modType=Bibles)
+and follow the steps at the [For Linux](https://www.crosswire.org/sword/docs/moduleinstall.jsp)
+section on the website of The SWORD Project.
 
 ### Running
 
@@ -117,3 +122,7 @@ Enter the command
 ```commandline
 ./lxx
 ```
+
+### Full output
+
+The full output of a simple run can be found in the file [output.txt](output.txt).
