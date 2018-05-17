@@ -4,6 +4,7 @@
  * and contributed by Zoltán Kovács <zoltan@geogebra.org>.
  */
 
+#include <algorithm>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -98,26 +99,38 @@ string processVerse(const string &verse) {
     return out;
 }
 
-void loadVerses() {
+void loadVerses(string ls, string Ls, string ss, string Ss) {
     SWMgr library(new MarkupFilterMgr(FMT_PLAIN));
     SWModule *lxx, *sblgnt;
     lxx = library.getModule("LXX");
     if (!lxx) {
-        cout << "The SWORD module LXX is not installed" << "\n";
+        cerr << "The SWORD module LXX is not installed" << "\n";
         exit(1);
     }
     sblgnt = library.getModule("SBLGNT");
     if (!sblgnt) {
-        cout << "The SWORD module SBLGNT is not installed" << "\n";
+        cerr << "The SWORD module SBLGNT is not installed" << "\n";
         exit(1);
     }
-    lxx->setKey("Genesis 1:1");
+    if (ls.length() == 0) {
+        ls = "Genesis 1:1";
+    }
+    if (Ls.length() == 0) {
+        Ls = "Malachi 4:6";
+    }
+    if (ss.length() == 0) {
+        ss = "Matthew 1:1";
+    }
+    if (Ss.length() == 0) {
+        Ss = "Revelation 22:21";
+    }
+    lxx->setKey(ls.c_str());
     lStart = lxx->getIndex(); // 4
-    lxx->setKey("Malachi 4:6");
+    lxx->setKey(Ls.c_str());
     lEnd = lxx->getIndex(); // 24114
-    sblgnt->setKey("Matthew 1:1");
+    sblgnt->setKey(ss.c_str());
     sStart = sblgnt->getIndex(); // 24118
-    sblgnt->setKey("Revelation 22:21");
+    sblgnt->setKey(Ss.c_str());
     sEnd = sblgnt->getIndex(); // 32359
 
     SWBuf lVerse, sVerse;
@@ -222,15 +235,79 @@ void compareVerses(long l1, long lN, long s1, long sN) {
     }
 }
 
-
-void fullCompare() {
-    compareVerses(lStart, lEnd, sStart, sEnd);
+void compareVersesSwapLoops(long l1, long lN, long s1, long sN) {
+    for (long s = s1; s <= sN; ++s) {
+        if (verses[s].length() > 0) {
+            for (long l = l1; l <= lN; ++l) {
+                compareVerses(l, s);
+            }
+        }
+    }
 }
 
-int main() {
-    loadVerses();
+// @author Iain Hull (https://stackoverflow.com/a/868894/1044586)
+class InputParser {
+public:
+    InputParser(int &argc, char **argv) {
+        for (int i = 1; i < argc; ++i)
+            this->tokens.emplace_back(argv[i]);
+    }
+
+    const string &getCmdOption(const string &option) const {
+        vector<string>::const_iterator itr;
+        itr = find(this->tokens.cbegin(), this->tokens.cend(), option);
+        if (itr != this->tokens.end() && ++itr != this->tokens.end()) {
+            return *itr;
+        }
+        static const string empty_string;
+        return empty_string;
+    }
+
+    bool cmdOptionExists(const string &option) const {
+        return find(this->tokens.begin(), this->tokens.end(), option)
+               != this->tokens.end();
+    }
+
+private:
+    vector<string> tokens;
+};
+
+void showHelp(const string &executable) {
+    cout << "Usage: " << executable << " [options]\n";
+    cout << " where options can be:\n";
+    cout << " -h            this help\n";
+    cout << " -l <verse>    first LXX verse to lookup (e.g. \"Genesis 1:1\")\n";
+    cout << " -L <verse>    last LXX verse to lookup\n";
+    cout << " -s <verse>    first SBLGNT verse to lookup\n";
+    cout << " -S <verse>    last SBLGNT verse to lookup\n";
+    cout << " -n            sort the output by New Testament matches\n";
+}
+
+int main(int argc, char **argv) {
+    InputParser input(argc, argv);
+    if (input.cmdOptionExists("-h")) {
+        showHelp(argv[0]);
+        exit(0);
+    }
+    string l, L, s, S;
+    if (input.cmdOptionExists("-l")) {
+        l = input.getCmdOption("-l");
+    }
+    if (input.cmdOptionExists("-L")) {
+        L = input.getCmdOption("-L");
+    }
+    if (input.cmdOptionExists("-s")) {
+        s = input.getCmdOption("-s");
+    }
+    if (input.cmdOptionExists("-S")) {
+        S = input.getCmdOption("-S");
+    }
+    loadVerses(l, L, s, S);
     // compareVerses(30,25605);
-    fullCompare();
+    if (input.cmdOptionExists("-n")) {
+        compareVersesSwapLoops(lStart, lEnd, sStart, sEnd);
+    } else {
+        compareVerses(lStart, lEnd, sStart, sEnd);
+    }
     return 0;
 }
-

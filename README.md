@@ -88,6 +88,8 @@ Enter the command
 ./lxx
 ```
 
+There are some command line options available. Please use the switch **-h** to learn more on this. 
+
 ### Full output
 
 The full output of a simple run of a previous version of the tool
