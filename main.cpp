@@ -17,24 +17,20 @@
 using namespace std;
 using namespace sword;
 
-// Keep only words with a minimum length of...
-#define MIN_WORD_LENGTH 5
 // The number of matching words must be at least...
-#define MIN_WORDS_MATCH 3
+#define MIN_CHARS_MATCH 20
 
 // This is hardcoded, it contains the index of the last verse
 // in the New Testament in Sword.
 #define MAX_VERSES 32360
-// Greek UTF8 characters are stored on two bytes
-#define _MIN_WORD_LENGTH (MIN_WORD_LENGTH * 2)
 
 string keys[MAX_VERSES];
 string verses[MAX_VERSES];
 
-long sstart;
-long send;
-long lstart;
-long lend;
+long sStart;
+long sEnd;
+long lStart;
+long lEnd;
 
 string processWord(string word) {
     string rewritten;
@@ -68,21 +64,38 @@ string processWord(string word) {
     return rewritten;
 }
 
-string processVerse(const string &verse) {
+/* Remove double spaces. */
+string printVerse(const string &verse) {
+    string out;
     string word;
-    string truncatedVerse;
+    stringstream ss(verse);
+
+    while (ss >> word) {
+        out.append(word).append(" ");
+    }
+
+    // remove last space
+    out.pop_back();
+    return out;
+}
+
+/* Add double spaces. */
+string processVerse(const string &verse) {
+    string out;
+    string word;
     stringstream ss(verse);
 
     while (ss >> word) {
         word = processWord(word);
-        if (word.length() >= _MIN_WORD_LENGTH) {
-            word.resize(_MIN_WORD_LENGTH);
-            truncatedVerse.append(word);
-            truncatedVerse.append(" ");
-        }
+        out.append(word);
+        // use double space to ease comparison later
+        out.append("  ");
     }
 
-    return truncatedVerse;
+    // remove last two spaces
+    out.pop_back();
+    out.pop_back();
+    return out;
 }
 
 void loadVerses() {
@@ -99,64 +112,100 @@ void loadVerses() {
         exit(1);
     }
     lxx->setKey("Genesis 1:1");
-    lstart = lxx->getIndex(); // 4
+    lStart = lxx->getIndex(); // 4
     lxx->setKey("Malachi 4:6");
-    lend = lxx->getIndex(); // 24114
+    lEnd = lxx->getIndex(); // 24114
     sblgnt->setKey("Matthew 1:1");
-    sstart = sblgnt->getIndex(); // 24118
+    sStart = sblgnt->getIndex(); // 24118
     sblgnt->setKey("Revelation 22:21");
-    send = sblgnt->getIndex(); // 32359
+    sEnd = sblgnt->getIndex(); // 32359
 
-    SWBuf lverse, sverse;
+    SWBuf lVerse, sVerse;
     SWOptionFilter *filter = new UTF8GreekAccents();
     filter->setOptionValue("off");
 
-    cout << "Loading LXX...";
+    cerr << "Loading LXX..." << flush;
     // Iterate on verses of LXX:
-    for (long l = lstart; l <= lend; ++l) {
+    for (long l = lStart; l <= lEnd; ++l) {
         lxx->setIndex(l);
-        lverse = lxx->renderText();
+        lVerse = lxx->renderText();
         // Some entries may be empty (e.g. book or chapter titles):
-        if (lverse.size() > 0) {
+        if (lVerse.size() > 0) {
             keys[l] = lxx->getKeyText();
-            verses[l] = processVerse(lverse.c_str());
+            verses[l] = processVerse(lVerse.c_str());
         }
     }
-    cout << " done" << "\n";
+    cerr << " done" << "\n";
 
-    cout << "Loading SBLGNT (without accents)...";
+    cerr << "Loading SBLGNT (without accents)..." << flush;
     // Iterate on verses of NT:
-    for (long s = sstart; s <= send; ++s) {
+    for (long s = sStart; s <= sEnd; ++s) {
         // Lookup NT text:
         sblgnt->setIndex(s);
-        sverse = sblgnt->renderText();
-        if (sverse.size() > 0) {
+        sVerse = sblgnt->renderText();
+        if (sVerse.size() > 0) {
             // Remove accents from the NT text:
-            filter->processText(sverse);
+            filter->processText(sVerse);
             keys[s] = sblgnt->getKeyText();
-            verses[s] = processVerse(sverse.c_str());
+            verses[s] = processVerse(sVerse.c_str());
         }
     }
-    cout << " done" << "\n";
+    cerr << " done" << "\n";
 }
 
 int compareVerses(long v1i, long v2i) {
     string v1 = verses[v1i];
     string v2 = verses[v2i];
-    int v1l = v1.length();
-    int v1w = v1l / (_MIN_WORD_LENGTH + 1);
-    // cout << "v1=" << v1 << "(" << v1w << ")\n";
-    // cout << "v2=" << v2 << "(" << v2w << ")\n";
+    int v1l = v1.length() / 2;
 
-    for (int w = v1w; w >= MIN_WORDS_MATCH; --w) {
-        for (int s = 0; s <= v1w - w; ++s) {
-            string sub = v1.substr(static_cast<unsigned long>(s * (_MIN_WORD_LENGTH + 1)),
-                                   static_cast<unsigned long>(w * (_MIN_WORD_LENGTH + 1)));
-            // cout << "Checking " << sub << "\n";
-            int found = v2.find(sub);
-            if (found != string::npos) {
-                // cout << "Found at position " << found << " \n";
-                return true;
+    for (int w = v1l; w >= MIN_CHARS_MATCH; --w) {
+        for (int s = 0; s <= v1l - w; ++s) {
+            string sub = v1.substr(static_cast<unsigned long>(s * 2),
+                                   static_cast<unsigned long>(w * 2));
+            int start_ok = false;
+            if (s == 0) {
+                start_ok = true;
+            } else {
+                string start = v1.substr(s * 2 - 2, 2);
+                if (start == "  ") {
+                    start_ok = true;
+                }
+            }
+            if (start_ok) {
+                string end = sub.substr(sub.length() - 2, 2);
+                if (end == "  " || (s + w) * 2 == v1.length()) {
+                    // Do comparison only for whole words
+                    if (end == "  ") {
+                        sub.pop_back();
+                        sub.pop_back();
+                    }
+                    int found = v2.find(sub);
+                    if (found != string::npos) {
+                        string out;
+                        out = keys[v1i];
+                        out.append(": ");
+                        if (s > 0) {
+                            out.append(v1.substr(0, s * 2));
+                        }
+                        out.append("**").append(sub).append("**");
+                        if ((s + w) * 2 < v1.length()) {
+                            out.append("  ").append(v1.substr((s + w) * 2));
+                        }
+
+                        out.append(" → ").append(keys[v2i]).append(": ");
+                        if (found > 0) {
+                            out.append(v2.substr(0, found));
+                        }
+                        out.append("**").append(sub).append("**");
+                        if (found + w * 2 < v2.length()) {
+                            out.append("  ").append(v2.substr(found + w * 2));
+                        }
+                        out.append("\n");
+                        cout << printVerse(out) << "\n" << flush;
+
+                        return true;
+                    }
+                }
             }
         }
     }
@@ -164,21 +213,18 @@ int compareVerses(long v1i, long v2i) {
 }
 
 void compareVerses(long l1, long lN, long s1, long sN) {
-    for (long l = l1; l < lN; ++l) {
+    for (long l = l1; l <= lN; ++l) {
         if (verses[l].length() > 0) {
-            for (long s = s1; s < sN; ++s) {
-                if (compareVerses(l, s)) {
-                    cout << keys[l] << " (" << l
-                         << ") seems to be cited in " << keys[s]
-                         << " (" << s << ")\n";
-                }
+            for (long s = s1; s <= sN; ++s) {
+                compareVerses(l, s);
             }
         }
     }
 }
 
+
 void fullCompare() {
-    compareVerses(lstart, lend, sstart, send);
+    compareVerses(lStart, lEnd, sStart, sEnd);
 }
 
 int main() {

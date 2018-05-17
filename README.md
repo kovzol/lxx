@@ -43,62 +43,21 @@ of the Septuagint with all verses of the Greek New Testament.
 The texts are provided by the SWORD project
 from the modules LXX and SBLGNT.
 
-It is well-known that citations can differ in
-some letters sometimes. The current method therefore makes
-a major rewrite of each Bible verse before comparison:
+Before comparing two verses, two steps are required:
 
 1. All accents are removed. (This step is performed
 only on the text of SBLGNT.)
 2. All letters are converted into lowercase.
-3. All words that are shorter than 5 letters are removed.
-4. The remaining words are shortened to 5 letters by
-removing their last letters.
 
 After these steps an exact match is checked
 between two verses, using substrings of whole words,
 leaving them in the same consecutive order.
 
-### Example
+### Output
 
-Genesis 1:27 ("So God created mankind in his own image,
-in the image of God he created them; male and female he created them.",
-New International Version) appears as **και εποιησεν ο 
-θεος τον ανθρωπον κατ εικονα θεου εποιησεν αυτον 
-αρσεν και θηλυ εποιησεν αυτους** in the Septuagint.
-This verse is stored in the form "εποιη ανθρω
-εικον εποιη αυτον αρσεν εποιη αυτου" internally.
+All matches are printed on the standard output (on the terminal), line by line, like this first match:
 
-In the New Testament there are two matches of this
-verse of the Old Testament. The first occurrence
-is Matthew 19:4 ("“Haven’t you read,” he replied,
-“that at the beginning the Creator ‘made them male and female,’",
-New International Version): **ὁ δὲ ἀποκριθεὶς ⸀εἶπεν· Οὐκ
-ἀνέγνωτε ὅτι ὁ ⸀κτίσας ἀπʼ ἀρχῆς ἄρσεν καὶ θῆλυ
-ἐποίησεν αὐτοὺς**. This is internally rendered
-as "αποκρ ειπεν ανεγν κτισα αρσεν εποιη αυτου".
-
-Now Genesis 1:27 is stored as 8 words, and Matthew 19:4
-as 7 words, both in 5 letters. The computer finds
-then that the 3 last words match, and prints
-both verses on the terminal window in this form:
-```
-Genesis 1:27 (30) seems to be cited in Matthew 19:4 (24757)
-```
-The numbers in parentheses show where these
-verses appear in the SWORD databases internally.
-
-Note that the software tool ignores matches
-under having at least 3 matching words. 
-
-### Problems with the method
-
-* Short verses are ignored.
-* Verses that have short words may be ignored
-or can be reported unnecessarily when the long
-words in them appear in other verses.
-
-Hopefully these problems will be fixed in
-a future version of the tool.
+Genesis 1:1: εν αρχη εποιησεν ο θεος **τον ουρανον και την γην** → Luke 16:17: ευκοπωτερον δε εστιν **τον ουρανον και την γην** παρελθειν η του νομου μιαν κεραιαν πεσειν 
 
 ## Using the software tool
 
@@ -131,6 +90,13 @@ Enter the command
 
 ### Full output
 
-The full output of a simple run can be found in the file [output.txt](output.txt).
-This output can be created in about 10 minutes by using a modern
-personal computer.
+The full output of a simple run of a previous version of the tool
+can be found in the file [output.txt](output.txt).
+It was produced in about 10 minutes by using a modern personal computer,
+but there were some issues with the used method, hence this output
+is not accurate and should be handled carefully.
+
+The current version runs much slower, but it should give all matches properly.
+This is, however, not fully checked yet. The output for verses in the book of Genesis
+can be found in the file [Genesis.txt](Genesis.txt). It took more than an hour
+to create this output. 
