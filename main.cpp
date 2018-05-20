@@ -93,9 +93,6 @@ string processVerse(const string &verse) {
         out.append("  ");
     }
 
-    // remove last two spaces
-    out.pop_back();
-    out.pop_back();
     return out;
 }
 
@@ -188,12 +185,9 @@ int compareVerses(long v1i, long v2i) {
                 string end = sub.substr(sub.length() - 2, 2);
                 if (end == "  " || (s + w) * 2 == v1.length()) {
                     // Do comparison only for whole words
-                    if (end == "  ") {
-                        sub.pop_back();
-                        sub.pop_back();
-                    }
                     int found = v2.find(sub);
                     if (found != string::npos) {
+                        sub = sub.substr(0, sub.length() - 2);
                         string out;
                         out = keys[v1i];
                         out.append(": ");
