@@ -18,7 +18,7 @@
 using namespace std;
 using namespace sword;
 
-// The number of matching words must be at least...
+// The number of matching characters must be at least...
 #define MIN_CHARS_MATCH 20
 
 // This is hardcoded, it contains the index of the last verse
@@ -32,6 +32,10 @@ long sStart;
 long sEnd;
 long lStart;
 long lEnd;
+
+// show percentage or not
+int p = 0;
+int previousPercentage = 0;
 
 string processWord(string word) {
     string rewritten;
@@ -219,23 +223,43 @@ int compareVerses(long v1i, long v2i) {
     return false;
 }
 
+void showPercentage(double d) {
+    int di = d * 100;
+    if (previousPercentage != di) {
+        cerr << di << "% done" << "\n" << flush;
+        }
+    previousPercentage = di;
+    }
+
 void compareVerses(long l1, long lN, long s1, long sN) {
     for (long l = l1; l <= lN; ++l) {
+        if (p == 1) {
+            showPercentage((l - l1 + 0.0) / (lN - l1 + 1));
+        }
         if (verses[l].length() > 0) {
             for (long s = s1; s <= sN; ++s) {
                 compareVerses(l, s);
             }
         }
     }
+    if (p == 1) {
+        showPercentage(1);
+    }
 }
 
 void compareVersesSwapLoops(long l1, long lN, long s1, long sN) {
     for (long s = s1; s <= sN; ++s) {
+        if (p == 1) {
+            showPercentage((s - s1 + 0.0) / (sN - s1 + 1));
+        }
         if (verses[s].length() > 0) {
             for (long l = l1; l <= lN; ++l) {
                 compareVerses(l, s);
             }
         }
+    }
+    if (p == 1) {
+        showPercentage(1);
     }
 }
 
@@ -275,6 +299,7 @@ void showHelp(const string &executable) {
     cout << " -s <verse>    first SBLGNT verse to lookup\n";
     cout << " -S <verse>    last SBLGNT verse to lookup\n";
     cout << " -n            sort the output by New Testament matches\n";
+    cout << " -p            show process percentage\n";
 }
 
 int main(int argc, char **argv) {
@@ -295,6 +320,9 @@ int main(int argc, char **argv) {
     }
     if (input.cmdOptionExists("-S")) {
         S = input.getCmdOption("-S");
+    }
+    if (input.cmdOptionExists("-p")) {
+        p = 1;
     }
     loadVerses(l, L, s, S);
     // compareVerses(30,25605);
