@@ -53,6 +53,25 @@ After these steps an exact match is checked
 between two verses, using substrings of whole words,
 leaving them in the same consecutive order.
 
+## Warning
+
+It is very important that the matches should be double
+checked before concluding any assertions. Also, both the modules LXX
+and SBLGNT contain just one plausible text of the originals,
+based on several scientific results which may be, unfortunately,
+outdated for the moment. The texts therefore cannot be surely the
+same as the prototypes (that are known to be lost).
+See also some recent research on this topic,
+for example, in
+
+* Karrer, Kreuzer and Sigismund: _Von der Septuaginta zum Neuen Testament:
+Textgeschichtliche Erörterungen (Arbeiten zur neutestamentlichen Textforschung, Band 43)_,
+ISBN 3110240017, de Gruyter, 2010
+
+On the other hand, comparing the plausible texts results
+in surprisingly good matches, even when considering the newest
+scientific results.
+
 ### Output
 
 All matches are printed on the standard output (on the terminal), line by line, like this first match:
